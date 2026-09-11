@@ -60,6 +60,64 @@ safety threshold, block at the last slot, 3 slots old parent 30, block 31, curre
                 honest FFG support, late in the epoch        range 32..62, current 63     same_epoch     k=31     0.234%    0.0%
 ```
 
+## What the margin is today
+
+The section above asks how much padding the estimate needs. This one asks the
+reverse. The spec is unchanged, so what does the current padding deliver?
+
+The target is the one the 2023 notebook set. The padded estimate must come out too
+low at most 1 time in 10,000.
+
+| branch | padding | comes out too low |
+|---|---|---|
+| same-epoch, any `k` | none | **~50% of the time** |
+| cross-boundary, `x=1 y=1` | 0.5% | **36%** |
+| cross-boundary, `x=3 y=5` | 0.5% | 21% |
+| cross-boundary, `x=8 y=8` | 0.5% | 11% |
+| cross-boundary, `x=16 y=16` | 0.5% | 0.7% |
+
+The same-epoch branch has no padding, so it is a coin flip at every range length.
+It was always a coin flip. Under equal weights that cost nothing, because the
+estimate was almost exact. The misses are percent-sized now.
+
+On the cross-boundary branch, 0.5% is only **0.37 standard deviations** of the true
+committee weight at `x=1 y=1`. The target needs 3.72. Long ranges still land near
+target, because they sample most of the validator set and the variance collapses.
+
+So the designed margin is effectively gone.
+
+### How large the misses are
+
+Frequency alone overstates the problem. The size matters, and the misses are small.
+
+| | same-epoch `k=1` | cross-boundary `x=1 y=1` |
+|---|---|---|
+| comes out too low | 49.8% | 35.5% |
+| median miss | 1.33% | 0.76% |
+| too low by more than 2% | 15.4% | 3.4% |
+| too low by more than 5% | 0.6% | 0.006% |
+| worst in 200,000 draws | 9.59% | 6.12% |
+
+Read those two tables together. The estimate comes out too low often, and it comes
+out too low by about 1%.
+
+### What this does and does not mean
+
+**The engineered buffer is gone.** The design allowed one miss beyond the padding
+in 10,000. Today it misses one time in two or three.
+
+**The confirmations are not shown to be wrong.** A 1% error in the estimate moves
+the safety threshold by about 1%. Whether that flips a confirmation depends on the
+slack between a block's real support and the threshold. A block that FCR confirms
+normally carries a large attesting supermajority, well clear of the bar. This work
+does not measure how often it sits close.
+
+FCR runs with roughly no safety buffer on this term, where the design gave it a
+large one. That is a regression. It is not evidence that a confirmed block was
+wrong.
+
+Both tables come from `src/coverage_today.py`, and exact sampling confirms them.
+
 ## Why
 
 Consolidation is concentrated, not widespread. On the snapshot:
@@ -101,10 +159,10 @@ results/                       CSV output and run logs
 
 ## Validation
 
-**The harness reproduces the 2023 table.** Six of the seven published rows come
+**The code reproduces the 2023 table.** Six of the seven published rows come
 out exactly, and the seventh differs by one grid step:
 
-| validators | published | this harness |
+| validators | published | this code |
 |---|---|---|
 | 9,375 | 1.9% | 1.9% |
 | 18,750 | 1.3% | 1.4% |
@@ -228,6 +286,7 @@ uv pip install --python .venv/bin/python -r requirements.txt
 
 .venv/bin/python src/fetch_mainnet_balances.py   # about 9 minutes, 473 requests
 .venv/bin/python src/analyse_mainnet.py          # the headline result
+.venv/bin/python src/coverage_today.py            # what the padding delivers today
 ```
 
 `fetch_mainnet_balances.py` reads a public beacon API and keeps only the
