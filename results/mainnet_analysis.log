@@ -1,0 +1,53 @@
+=== Mainnet active validator set ===
+source            : https://ethereum-beacon-api.publicnode.com
+fetched           : 2026-09-10T23:16:47Z
+active validators : 909,682
+total active bal  : 43,036,901 ETH
+mean eff. balance : 47.31 ETH
+sd eff. balance   : 158.03 ETH
+cv eff. balance   : 3.3404
+distinct balances : 1,414
+
+most common effective balances:
+      32.00 ETH    895,607 validators  98.45%
+   2,048.00 ETH        507 validators   0.06%
+      33.00 ETH        447 validators   0.05%
+      31.00 ETH        350 validators   0.04%
+      64.00 ETH        197 validators   0.02%
+   1,808.00 ETH        179 validators   0.02%
+   1,809.00 ETH        173 validators   0.02%
+     851.00 ETH        157 validators   0.02%
+
+validators above 32 ETH: 14,075 (1.55% of validators, 33.38% of stake)
+largest effective balance: 2,048 ETH
+
+=== Required margin for 99.99% coverage ===
+cross-boundary branch: worst 5.091% at x=1, y=1  (spec pads 0.5%, short by 10.2x)
+cross-boundary branch: median 0.637%, best 0.042%
+same-epoch branch    : worst 7.252% at k=1  (spec pads nothing)
+same-epoch branch    : at k=31 needs 0.234% with 3.226% headroom before it passes total_active_balance
+
+=== Concrete FCR situations ===
+SLOTS_PER_EPOCH is 32. Epoch 1 starts at slot 32.
+
+                                            situation                           slots         branch    range  required_pct  spec_padding_pct shortfall_x
+         safety threshold, no missed slots, mid-epoch parent 40, block 41, current 42     same_epoch      k=1         7.252               0.0         inf
+                  safety threshold, block 2 slots old parent 40, block 41, current 43     same_epoch      k=2         5.045               0.0         inf
+    safety threshold, 4 missed slots before the block parent 36, block 41, current 42     same_epoch      k=5         3.027               0.0         inf
+ safety threshold, block at the last slot of an epoch parent 30, block 31, current 33 cross_boundary x=1, y=1         5.091               0.5        10.2
+safety threshold, block at the last slot, 3 slots old parent 30, block 31, current 35 cross_boundary x=3, y=1         3.497               0.5         7.0
+   safety threshold, missed slots across the boundary parent 26, block 33, current 35 cross_boundary x=3, y=5         2.354               0.5         4.7
+           honest FFG support, 8 slots into the epoch        range 32..39, current 40     same_epoch      k=8         2.256               0.0         inf
+                honest FFG support, late in the epoch        range 32..62, current 63     same_epoch     k=31         0.234               0.0         inf
+
+=== Exact-sampling check (100k trials) ===
+cross-boundary branch:
+  x= 1 y= 1  analytic=  5.091%  sampled=  5.266%  P(covers)=0.505
+  x= 3 y= 5  analytic=  2.354%  sampled=  2.318%  P(covers)=0.501
+same-epoch branch:
+  k= 1        analytic=  7.252%  sampled=  7.471%  P(covers)=0.508
+  k= 4        analytic=  3.446%  sampled=  3.417%  P(covers)=0.500
+
+wrote ./results/mainnet_cross_boundary.csv
+wrote ./results/mainnet_same_epoch.csv
+wrote ./results/mainnet_call_sites.csv

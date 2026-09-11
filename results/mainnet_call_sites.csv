@@ -1,0 +1,9 @@
+situation,slots,branch,range,required_pct,spec_padding_pct,shortfall_x
+"safety threshold, no missed slots, mid-epoch","parent 40, block 41, current 42",same_epoch,k=1,7.252,0.0,inf
+"safety threshold, block 2 slots old","parent 40, block 41, current 43",same_epoch,k=2,5.045,0.0,inf
+"safety threshold, 4 missed slots before the block","parent 36, block 41, current 42",same_epoch,k=5,3.027,0.0,inf
+"safety threshold, block at the last slot of an epoch","parent 30, block 31, current 33",cross_boundary,"x=1, y=1",5.091,0.5,10.2
+"safety threshold, block at the last slot, 3 slots old","parent 30, block 31, current 35",cross_boundary,"x=3, y=1",3.497,0.5,7.0
+"safety threshold, missed slots across the boundary","parent 26, block 33, current 35",cross_boundary,"x=3, y=5",2.354,0.5,4.7
+"honest FFG support, 8 slots into the epoch","range 32..39, current 40",same_epoch,k=8,2.256,0.0,inf
+"honest FFG support, late in the epoch","range 32..62, current 63",same_epoch,k=31,0.234,0.0,inf

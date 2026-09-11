@@ -1,0 +1,31 @@
+probing validator count at https://ethereum-beacon-api.publicnode.com
+validator records: 2,362,808
+      5,000/2,362,808 records  65 distinct active balances  1s
+    105,000/2,362,808 records  228 distinct active balances  21s
+    205,000/2,362,808 records  274 distinct active balances  41s
+    305,000/2,362,808 records  302 distinct active balances  62s
+    405,000/2,362,808 records  317 distinct active balances  82s
+    505,000/2,362,808 records  354 distinct active balances  102s
+    605,000/2,362,808 records  376 distinct active balances  122s
+    705,000/2,362,808 records  394 distinct active balances  142s
+    805,000/2,362,808 records  412 distinct active balances  163s
+    905,000/2,362,808 records  423 distinct active balances  184s
+  1,005,000/2,362,808 records  433 distinct active balances  204s
+  1,105,000/2,362,808 records  448 distinct active balances  226s
+  1,205,000/2,362,808 records  460 distinct active balances  251s
+  1,305,000/2,362,808 records  471 distinct active balances  274s
+  1,405,000/2,362,808 records  505 distinct active balances  297s
+  1,505,000/2,362,808 records  527 distinct active balances  319s
+  1,605,000/2,362,808 records  540 distinct active balances  340s
+  1,705,000/2,362,808 records  563 distinct active balances  362s
+  1,805,000/2,362,808 records  576 distinct active balances  383s
+  1,905,000/2,362,808 records  581 distinct active balances  405s
+  2,005,000/2,362,808 records  628 distinct active balances  429s
+  2,105,000/2,362,808 records  694 distinct active balances  451s
+  2,205,000/2,362,808 records  1018 distinct active balances  474s
+  2,305,000/2,362,808 records  1290 distinct active balances  495s
+
+active validators: 909,682
+total active balance: 43,036,901 ETH
+distinct effective balances: 1414
+wrote ./results/mainnet_effective_balances.json
